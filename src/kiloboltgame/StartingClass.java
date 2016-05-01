@@ -23,7 +23,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     GameState state = GameState.Running;
 
 	private static Robot robot;
-	public static Heliboy hb, hb2;
+	public static Heliboy hb, hb2,hb3,hb4;
 	public static int score = 0;
 	private Font font = new Font(null, Font.BOLD, 30);
 
@@ -113,7 +113,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		hb = new Heliboy(340, 360);
 		hb2 = new Heliboy(700, 360);
-
+		hb3 = new Heliboy(1000, 360);
 		Thread thread = new Thread(this);
 		thread.start();
 	}
@@ -191,6 +191,8 @@ public void run() {
 			updateTiles();
 			hb.update();
 			hb2.update();
+			hb3.update();
+			
 			bg1.update();
 			bg2.update();
 			animate();
@@ -251,7 +253,9 @@ public void run() {
 		g.drawImage(hanim.getImage(), hb.getCenterX() - 48,
 				hb.getCenterY() - 48, this);
 		g.drawImage(hanim.getImage(), hb2.getCenterX() - 48,
-				hb2.getCenterY() - 48, this);
+				hb2.getCenterY() - 48, this);		
+		g.drawImage(hanim.getImage(), hb3.getCenterX() - 48,
+						hb3.getCenterY() - 48, this);
 		g.setFont(font);
 		g.setColor(Color.WHITE);
 		g.drawString(Integer.toString(score), 740, 30);	

@@ -19,6 +19,7 @@ public class Robot {
 
     private int speedX = 0;
     private int speedY = 0;
+    
     public static Rectangle rect = new Rectangle(0, 0, 0, 0);
     public static Rectangle rect2 = new Rectangle(0, 0, 0, 0);
     public static Rectangle rect3 = new Rectangle(0, 0, 0, 0);
