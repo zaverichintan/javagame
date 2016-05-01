@@ -165,14 +165,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public void run() {
+    @Override
+public void run() {
+
 	if (state == GameState.Running) {
 		while (true) {
 			robot.update();
 			if (robot.isJumped()) {
 				currentSprite = characterJumped;
-			} else if (robot.isJumped() == false && robot.isDucked() == false) {
+			} else if (robot.isJumped() == false
+					&& robot.isDucked() == false) {
 				currentSprite = anim.getImage();
 			}
 
@@ -198,9 +200,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			if (robot.getCenterY() > 500) {
+				state = GameState.Dead;
+			}
 		}
 	}
-	}
+
+}
+		
+	
 
 	public void animate() {
 		anim.update(10);
@@ -225,6 +233,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	@Override
 	public void paint(Graphics g) {
+		if (state == GameState.Running) {
+
 		g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
 		g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
 		paintTiles(g);
@@ -245,6 +255,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		g.setFont(font);
 		g.setColor(Color.WHITE);
 		g.drawString(Integer.toString(score), 740, 30);	
+		} 
+		else if (state == GameState.Dead) {
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, 800, 480);
+			g.setColor(Color.WHITE);
+			g.drawString("Dead", 360, 240);
+
+
+		}
 	}
 
 	private void updateTiles() {
