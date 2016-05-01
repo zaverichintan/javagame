@@ -21,7 +21,13 @@ public class Robot {
     private int speedY = 0;
     public static Rectangle rect = new Rectangle(0, 0, 0, 0);
     public static Rectangle rect2 = new Rectangle(0, 0, 0, 0);
+    public static Rectangle rect3 = new Rectangle(0, 0, 0, 0);
+    public static Rectangle rect4 = new Rectangle(0, 0, 0, 0);
+    public static Rectangle yellowRed = new Rectangle(0, 0, 0, 0);
+    public static Rectangle footleft = new Rectangle(0,0,0,0);
+    public static Rectangle footright = new Rectangle(0,0,0,0);
 
+    
     private Background bg1 = StartingClass.getBg1();
     private Background bg2 = StartingClass.getBg2();
 
@@ -50,10 +56,12 @@ public class Robot {
         centerY += speedY;
 
         // Handles Jumping
-        if (jumped == true) {
-            speedY += 1;
 
-        }
+	    speedY += 1;
+	
+	    if (speedY > 3){
+	        jumped = true;
+	    }
 
         // Prevents going beyond X coordinate of 0
         if (centerX + speedX <= 60) {
@@ -61,7 +69,11 @@ public class Robot {
         }
         rect.setRect(centerX - 34, centerY - 63	, 68, 63);
         rect2.setRect(rect.getX(), rect.getY() + 63, 68, 64);
-        
+        rect3.setRect(rect.getX() - 26, rect.getY()+32, 26, 20);
+        rect4.setRect(rect.getX() + 68, rect.getY()+32, 26, 20);
+        yellowRed.setRect(centerX - 110, centerY - 110, 180, 180);
+        footleft.setRect(centerX - 50, centerY + 20, 50, 15);
+        footright.setRect(centerX, centerY + 20, 50, 15);
     }
 
     public boolean isReadyToFire() {
