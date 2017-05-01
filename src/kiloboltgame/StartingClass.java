@@ -27,12 +27,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     //declaration
 	private static Robot robot;
 	public static Heliboy hb,hb2,hb3,hb4;
+	 public static HealthyFood hf, hf2, hf3;
 	public static int score = 0;// to store the score 
 	private Font font = new Font(null, Font.BOLD, 30);
 
 
 	private Image image, currentSprite, character, character2, character3,
-			characterDown, characterJumped, background, heliboy, heliboy2;
+			characterDown, characterJumped, background, heliboy, heliboy2,healthyfood;
 
 	public static Image tilegrassTop, tilegrassBot, tilegrassLeft,
 			tilegrassRight, tiledirt;
@@ -40,7 +41,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private Graphics second;
 	private URL base;
 	private static Background bg1, bg2;
-	private Animation anim, hanim;
+	private Animation anim, hanim,fanim;
 
 	//to store array of images of tile 
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
@@ -80,6 +81,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		//enemy animation	
 		heliboy = getImage(base, "data/pizza.png");
 		heliboy2 = getImage(base, "data/pizza1.png");
+		
+		healthyfood = getImage(base,"data/cabbage.png");
 
 		//background animation
 		background = getImage(base, "data/background1.png");
@@ -102,6 +105,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		hanim = new Animation();
 		hanim.addFrame(heliboy, 200);
 		hanim.addFrame(heliboy2, 200);
+		
+		fanim=new Animation();
+		fanim.addFrame(healthyfood, 150);
 
 		currentSprite = anim.getImage();
 	}
@@ -125,6 +131,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		hb = new Heliboy(340, 360);
 		hb2 = new Heliboy(700, 360);
 		hb3 = new Heliboy(1000, 360);
+		
+		hf = new HealthyFood(600,320);
+		hf2 = new HealthyFood(3200,250);
+		hf3 = new HealthyFood(4200,250);
+		
 		// creating thread
 		Thread thread = new Thread(this);
 		thread.start();
@@ -206,12 +217,15 @@ public void run() {
 			hb.update();
 			hb2.update();
 			hb3.update();
+			hf.update();
+			hf2.update();
+			hf3.update();
 			
 			bg1.update();
 			bg2.update();
 			anim.update(10); //robot update
 			hanim.update(50); //helliboy update 
-			
+			fanim.update(50);
 			
 			repaint();
 			try {
@@ -275,7 +289,7 @@ public void run() {
 			g.setColor(Color.YELLOW);
 			g.fillRect(p.getX(), p.getY(), 10, 5);
 		}
-
+		//render on screen
 		g.drawImage(currentSprite, robot.getCenterX() - 61,
 				robot.getCenterY() - 63, this);
 		g.drawImage(hanim.getImage(), hb.getCenterX() - 48,
@@ -284,6 +298,13 @@ public void run() {
 				hb2.getCenterY() - 48, this);		
 		g.drawImage(hanim.getImage(), hb3.getCenterX() - 48,
 						hb3.getCenterY() - 48, this);
+		g.drawImage(fanim.getImage(), hf.getCenterX() - 48,
+	              hf.getCenterY() - 48, this);
+		g.drawImage(fanim.getImage(), hf2.getCenterX() - 48,
+	              hf2.getCenterY() - 48, this);            
+		g.drawImage(fanim.getImage(), hf3.getCenterX() - 48,
+	              hf3.getCenterY() - 48, this);
+	            
 		
 		g.setFont(font);
 		g.setColor(Color.WHITE);
