@@ -39,10 +39,8 @@ public class Projectile {
 				StartingClass.hb.health -= 1;
 			}
 			if (StartingClass.hb.health == 0) {
-				StartingClass.hb.setCenterX(-100);
+				StartingClass.hb.setCenterX(-100); // remove it from the view
 				StartingClass.score += 5;
-
-
 			}
 		}
 		
@@ -54,8 +52,17 @@ public class Projectile {
 			if (StartingClass.hb2.health == 0) {
 				StartingClass.hb2.setCenterX(-100);
 				StartingClass.score += 5;
+			}
 
-
+		}
+		if (r.intersects(StartingClass.hb3.r)){
+			visible = false;
+			if (StartingClass.hb3.health > 0) {
+				StartingClass.hb3.health -= 1;
+			}
+			if (StartingClass.hb3.health == 0) {
+				StartingClass.hb3.setCenterX(-100);
+				StartingClass.score += 5;
 			}
 
 		}

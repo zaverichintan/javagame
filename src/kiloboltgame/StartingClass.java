@@ -1,11 +1,13 @@
 package kiloboltgame;
 
 import java.applet.Applet;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Panel;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
@@ -18,19 +20,19 @@ import kiloboltgame.framework.Animation;
 public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	enum GameState{
-		Running,Dead
+		Start,Running,Dead
 	}
-    GameState state = GameState.Running;
-
+//    GameState state = GameState.Start;
+	GameState state = GameState.Running;
+    //declaration
 	private static Robot robot;
-	public static Heliboy hb, hb2,hb3,hb4;
-	public static int score = 0;
+	public static Heliboy hb,hb2,hb3,hb4;
+	public static int score = 0;// to store the score 
 	private Font font = new Font(null, Font.BOLD, 30);
 
 
 	private Image image, currentSprite, character, character2, character3,
-			characterDown, characterJumped, background, heliboy, heliboy2,
-			heliboy3, heliboy4, heliboy5;
+			characterDown, characterJumped, background, heliboy, heliboy2;
 
 	public static Image tilegrassTop, tilegrassBot, tilegrassLeft,
 			tilegrassRight, tiledirt;
@@ -40,7 +42,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static Background bg1, bg2;
 	private Animation anim, hanim;
 
+	//to store array of images of tile 
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
+	
 
 	@Override
 	public void init() {
@@ -50,7 +54,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		setFocusable(true);
 		addKeyListener(this);
 		Frame frame = (Frame) this.getParent().getParent();
-		frame.setTitle("Q-Bot Alpha");
+		frame.setTitle("Avoid Junkies");
+		
+//		Panel startpanel = new Panel();
+//		Button b = new Button("Play");
+//		startpanel.add(b);
+//		
+//		frame.add(startpanel);
+		
 		try {
 			base = getDocumentBase();
 		} catch (Exception e) {
@@ -58,48 +69,47 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 
 		// Image Setups
+		//characters for animation
 		character = getImage(base, "data/character.png");
 		character2 = getImage(base, "data/character2.png");
 		character3 = getImage(base, "data/character3.png");
-
+		//for jump and duck
 		characterDown = getImage(base, "data/down.png");
 		characterJumped = getImage(base, "data/jumped.png");
 
-		heliboy = getImage(base, "data/heliboy.png");
-		heliboy2 = getImage(base, "data/heliboy2.png");
-		heliboy3 = getImage(base, "data/heliboy3.png");
-		heliboy4 = getImage(base, "data/heliboy4.png");
-		heliboy5 = getImage(base, "data/heliboy5.png");
+		//enemy animation	
+		heliboy = getImage(base, "data/pizza.png");
+		heliboy2 = getImage(base, "data/pizza1.png");
 
-		background = getImage(base, "data/background.png");
+		//background animation
+		background = getImage(base, "data/background1.png");
 
+		//tile maps
 		tiledirt = getImage(base, "data/tiledirt.png");
 		tilegrassTop = getImage(base, "data/tilegrasstop.png");
 		tilegrassBot = getImage(base, "data/tilegrassbot.png");
 		tilegrassLeft = getImage(base, "data/tilegrassleft.png");
 		tilegrassRight = getImage(base, "data/tilegrassright.png");
 
-		anim = new Animation();
+		//robo animation
+		anim = new Animation();	
 		anim.addFrame(character, 1250);
 		anim.addFrame(character2, 50);
 		anim.addFrame(character3, 50);
 		anim.addFrame(character2, 50);
-
+		
+		//heliboy animation
 		hanim = new Animation();
-		hanim.addFrame(heliboy, 100);
-		hanim.addFrame(heliboy2, 100);
-		hanim.addFrame(heliboy3, 100);
-		hanim.addFrame(heliboy4, 100);
-		hanim.addFrame(heliboy5, 100);
-		hanim.addFrame(heliboy4, 100);
-		hanim.addFrame(heliboy3, 100);
-		hanim.addFrame(heliboy2, 100);
+		hanim.addFrame(heliboy, 200);
+		hanim.addFrame(heliboy2, 200);
 
 		currentSprite = anim.getImage();
 	}
 
 	@Override
 	public void start() {
+		// start of Applet 
+		
 		bg1 = new Background(0, 0);
 		bg2 = new Background(2160, 0);
 		robot = new Robot();
@@ -111,9 +121,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			e.printStackTrace();
 		}
 
+		//init helliboys 
 		hb = new Heliboy(340, 360);
 		hb2 = new Heliboy(700, 360);
 		hb3 = new Heliboy(1000, 360);
+		// creating thread
 		Thread thread = new Thread(this);
 		thread.start();
 	}
@@ -122,7 +134,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		ArrayList lines = new ArrayList();
 		int width = 0;
 		int height = 0;
-
+		//reading values from file 
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		while (true) {
 			String line = reader.readLine();
@@ -139,14 +151,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			}
 		}
 		height = lines.size();
-
+		//j = height , i = width
+		
 		for (int j = 0; j < 12; j++) {
 			String line = (String) lines.get(j);
 			for (int i = 0; i < width; i++) {
 
 				if (i < line.length()) {
 					char ch = line.charAt(i);
-					Tile t = new Tile(i, j, Character.getNumericValue(ch));
+					Tile t = new Tile(i, j, Character.getNumericValue(ch)); //typecast character to integer
 					tilearray.add(t);
 				}
 
@@ -179,6 +192,7 @@ public void run() {
 			}
 
 			ArrayList projectiles = robot.getProjectiles();
+			
 			for (int i = 0; i < projectiles.size(); i++) {
 				Projectile p = (Projectile) projectiles.get(i);
 				if (p.isVisible() == true) {
@@ -195,27 +209,31 @@ public void run() {
 			
 			bg1.update();
 			bg2.update();
-			animate();
+			anim.update(10); //robot update
+			hanim.update(50); //helliboy update 
+			
+			
 			repaint();
 			try {
-				Thread.sleep(17);
+				Thread.sleep(17); // calculated with 60fps
+				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			if (robot.getCenterY() > 500) {
 				state = GameState.Dead;
 			}
+			if (score < 0) {
+				state = GameState.Dead;
+				score = 0;
+			}
+			
 		}
 	}
 
 }
 		
 	
-
-	public void animate() {
-		anim.update(10);
-		hanim.update(50);
-	}
 
 	@Override
 	public void update(Graphics g) {
@@ -235,7 +253,17 @@ public void run() {
 
 	@Override
 	public void paint(Graphics g) {
-		if (state == GameState.Running) {
+		if(state == GameState.Start){
+			
+//			g.setColor(Color.BLACK);
+//			g.fillRect(0, 0, 800, 480);
+//			g.setColor(Color.WHITE);
+//			g.drawString("Start", 360, 240);
+//			g.drawString(Integer.toString(score), 360, 280);	
+			//state = GameState.Running;
+			
+		}
+		else if (state == GameState.Running) {
 
 		g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
 		g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
@@ -256,8 +284,10 @@ public void run() {
 				hb2.getCenterY() - 48, this);		
 		g.drawImage(hanim.getImage(), hb3.getCenterX() - 48,
 						hb3.getCenterY() - 48, this);
+		
 		g.setFont(font);
 		g.setColor(Color.WHITE);
+		g.drawString("Health", 600, 30);
 		g.drawString(Integer.toString(score), 740, 30);	
 		} 
 		else if (state == GameState.Dead) {
@@ -265,8 +295,7 @@ public void run() {
 			g.fillRect(0, 0, 800, 480);
 			g.setColor(Color.WHITE);
 			g.drawString("Dead", 360, 240);
-
-
+			g.drawString(Integer.toString(score), 360, 280);	
 		}
 	}
 

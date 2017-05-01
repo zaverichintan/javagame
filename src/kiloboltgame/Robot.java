@@ -49,7 +49,8 @@ public class Robot {
             centerX += speedX;
         }
         if (speedX > 0 && centerX > 200) {
-            bg1.setSpeedX(-MOVESPEED / 5);
+        	//background speed should be negative and 1/5th in magnitude
+        	bg1.setSpeedX(-MOVESPEED / 5);
             bg2.setSpeedX(-MOVESPEED / 5);
         }
 

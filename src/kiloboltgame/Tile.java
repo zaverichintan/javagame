@@ -10,7 +10,7 @@ public class Tile {
     private Rectangle r;
 
     private Robot robot = StartingClass.getRobot();
-    private Background bg = StartingClass.getBg1();
+    private Background bg = StartingClass.getBg1(); // tile background
 
     public Tile(int x, int y, int typeInt) {
         tileX = x * 40;

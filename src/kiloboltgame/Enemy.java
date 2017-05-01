@@ -9,7 +9,7 @@ public class Enemy {
 	private Robot robot = StartingClass.getRobot();
 
 	public Rectangle r = new Rectangle(0, 0, 0, 0);
-	public int health = 5;
+	public int health = 1;
 
 	private int movementSpeed;
 
@@ -19,18 +19,19 @@ public class Enemy {
 		centerX += speedX;
 		speedX = bg.getSpeedX() * 5 + movementSpeed;
 		r.setBounds(centerX - 25, centerY - 25, 50, 60);
-
+		
 		if (r.intersects(Robot.yellowRed)) {
 			checkCollision();
 		}
-
 	}
 
 	private void checkCollision() {
 		if (r.intersects(Robot.rect) || r.intersects(Robot.rect2)
 				|| r.intersects(Robot.rect3) || r.intersects(Robot.rect4)) {
-			System.out.println("collision");
-
+			
+			System.out.println("collision"+ health);
+			StartingClass.score -= 2;
+			die();
 		}
 	}
 
@@ -56,7 +57,7 @@ public class Enemy {
 	}
 
 	public void die() {
-
+		this.setCenterX(-100);
 	}
 
 	public void attack() {
