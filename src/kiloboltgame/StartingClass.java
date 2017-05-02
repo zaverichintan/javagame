@@ -15,7 +15,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import kiloboltgame.framework.Animation;
+import java.io.BufferedReader; import java.io.BufferedWriter;
+import java.io.FileInputStream; import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException; import java.io.InputStream; import java.io.InputStreamReader; import java.io.PrintStream;
+import java.nio.charset.StandardCharsets; import java.nio.file.Files; import java.nio.file.Paths;
+
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
 
@@ -28,7 +36,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static Robot robot;
 	public static Heliboy hb,hb2,hb3,hb4;
 	 public static HealthyFood hf, hf2, hf3;
-	public static int score = 0;// to store the score 
+	 public static int score = 0;// to store the score
+	 public static int highScore = 0;// to store the score
+	
 	private Font font = new Font(null, Font.BOLD, 30);
 
 
@@ -71,6 +81,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Image Setups
 		//characters for animation
+//		character = getImage(base, "data/bheem.png");
 		character = getImage(base, "data/character.png");
 		character2 = getImage(base, "data/character2.png");
 		character3 = getImage(base, "data/character3.png");
@@ -122,6 +133,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		// Initialize Tiles
 		try {
 			loadMap("data/map1.txt");
+			loadHighScore();
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -173,12 +186,72 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					Tile t = new Tile(i, j, Character.getNumericValue(ch)); //typecast character to integer
 					tilearray.add(t);
 				}
-
 			}
 		}
 
 	}
 
+	private void loadHighScore() throws IOException {
+
+		String fileString = new String(Files.readAllBytes(Paths.get("data/highscore.txt")), StandardCharsets.UTF_8);
+		String[] fileStringArr = fileString.split(" ");
+		System.out.println(fileStringArr[1]);
+		highScore = Integer.parseInt(fileStringArr[1].trim());
+	}
+
+	public boolean updateScore(int score) throws IOException {
+		boolean status = false;
+		
+		if (score>highScore){
+			
+			status = true;
+			highScore = score;
+			String fileString = new String(Files.readAllBytes(Paths.get("data/highscore.txt")), StandardCharsets.UTF_8);
+			String[] fileStringArr = fileString.split(" ");
+			fileStringArr[1] = Integer.toString(highScore);
+			String[] outPut = new String[3];
+			outPut[0] = fileStringArr[0];
+			outPut[1] = " ";
+			outPut[2] = fileStringArr[1];
+			
+			StringBuilder strBuilder = new StringBuilder();
+			
+			for (int i = 0; i < outPut.length; i++) {	
+				strBuilder.append(outPut[i]);
+				}
+			String toWriteBack = strBuilder.toString();
+				
+			System.out.println(toWriteBack);
+			System.out.println("File Update");
+			BufferedWriter out = null;
+			try {
+			    out = new BufferedWriter(new FileWriter("data/highscore.txt"));
+			    out.write(toWriteBack);  //Replace with the string   
+//			    out.close();
+			}
+			
+			catch (IOException e)
+			{
+			    System.out.println("Exception ");
+
+			}finally {
+			    try {
+			        if(out != null){
+			            out.close();
+			        } else {
+			            System.out.println("Buffer has not been initialized!");
+			        }
+			    } catch (IOException e) {
+			        e.printStackTrace();
+			    }
+			}
+
+		}
+		
+		
+		return status;
+	}
+	
 	@Override
 	public void stop() {
 		// TODO Auto-generated method stub
@@ -191,7 +264,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     @Override
 public void run() {
-
+//this method is the game loop. the thread sleeps for particular time as calculated.
 	if (state == GameState.Running) {
 		while (true) {
 			robot.update();
@@ -316,7 +389,21 @@ public void run() {
 			g.fillRect(0, 0, 800, 480);
 			g.setColor(Color.WHITE);
 			g.drawString("Dead", 360, 240);
-			g.drawString(Integer.toString(score), 360, 280);	
+			g.drawString(Integer.toString(score), 360, 280);
+			
+			g.drawString("High Score", 360, 320);
+			g.drawString(Integer.toString(highScore), 360, 360);
+			
+			try {
+				if(updateScore(score)){
+					g.drawString("You made High Score", 360, 420);	
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 		}
 	}
 
@@ -341,6 +428,8 @@ public void run() {
 
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
+			robot.jump();
+
 			System.out.println("Move up");
 			break;
 
@@ -362,6 +451,7 @@ public void run() {
 			robot.setMovingRight(true);
 			break;
 
+			
 		case KeyEvent.VK_SPACE:
 			robot.jump();
 			break;
