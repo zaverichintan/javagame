@@ -1,6 +1,5 @@
 package kiloboltgame;
 
-
 public class Background {
 	
 	private int bgX, bgY, speedX;
@@ -43,7 +42,4 @@ public class Background {
 		this.speedX = speedX;
 	}
 
-	
-	
-	
 }

@@ -14,7 +14,6 @@ public class Projectile {
 		y = startY;
 		speedX = 7;
 		visible = true;
-		
 		r = new Rectangle (0,0,0,0);
 	}
 	
@@ -100,8 +99,4 @@ public class Projectile {
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
-	
-	
-	
-	
 }

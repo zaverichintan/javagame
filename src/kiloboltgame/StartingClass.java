@@ -1,15 +1,9 @@
 package kiloboltgame;
 
 import java.applet.Applet;
-import java.awt.Button;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Panel;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+
+import java.awt.*;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -26,21 +20,19 @@ import java.nio.charset.StandardCharsets; import java.nio.file.Files; import jav
 
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
-
 	enum GameState{
-		Start,Running,Dead
+	  Start,Running,Dead
 	}
-//    GameState state = GameState.Start;
-	GameState state = GameState.Running;
+  static  GameState state;
+  	//GameState state = GameState.Running;
     //declaration
 	private static Robot robot;
 	public static Heliboy hb,hb2,hb3,hb4;
-	 public static HealthyFood hf, hf2, hf3;
-	 public static int score = 0;// to store the score
-	 public static int highScore = 0;// to store the score
+	public static HealthyFood hf, hf2, hf3;
+	public static int score = 0;// to store the score
+	public static int highScore = 0;// to store the score
 	
 	private Font font = new Font(null, Font.BOLD, 30);
-
 
 	private Image image, currentSprite, character, character2, character3,
 			characterDown, characterJumped, background, heliboy, heliboy2,healthyfood;
@@ -55,24 +47,126 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	//to store array of images of tile 
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
-	
-
-	@Override
+		
+	Frame frame=new Frame();
+	Frame f=new Frame();	
 	public void init() {
 
+		state = GameState.Start;
 		setSize(800, 480);
 		setBackground(Color.BLACK);
 		setFocusable(true);
 		addKeyListener(this);
-		Frame frame = (Frame) this.getParent().getParent();
-		frame.setTitle("Avoid Junkies");
-		
-//		Panel startpanel = new Panel();
-//		Button b = new Button("Play");
-//		startpanel.add(b);
-//		
-//		frame.add(startpanel);
-		
+		frame = (Frame) this.getParent().getParent();
+		frame.setTitle("Avoid Junks");
+		frame.setVisible(false);
+			
+	    f.setSize(800,480);
+	    f.setLayout(null);
+	    
+	    Button b1=new Button("PLAY");
+  		Button b2=new Button("INSTRUCTION");
+  		Button b3=new Button("EXIT");
+  		b1.setBounds(130, 300, 150, 50);
+  		b2.setBounds(330,300,150,50);
+  		b3.setBounds(530, 300, 150,50);
+  		
+  		Font ft=new Font("Ariela",Font.BOLD,78);
+  		f.setBackground(Color.yellow);
+  		Label l=new Label("Avoid Junk");
+  		l.setFont(ft);
+  		l.setBounds(190, 100, 470, 150);
+  		f.add(l);
+  	    f.add(b1);
+  	    f.add(b2);
+  		f.add(b3);
+  		f.setVisible(true);
+	  			    
+	  		b2.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+				
+					f.setVisible(false);
+					final Frame f2=new Frame("Instructions");
+					f2.setSize(800,500);
+					Font ft1=new Font("Ariela",Font.BOLD,14);
+					Label l2=new Label("1. There will be a character by which you can play a game. ");
+					Label l3=new Label("2. By Character you can jump,duck and move horinotally, also you can shooting bullets.");
+					Label l4=new Label("3. There will be two types: 1.Healthy Food  2.Junk Food  ");
+					Label l5=new Label("4. You have to shoot the Junk food, at every time you get 5 points.");
+					Label l6=new Label("5. If you collide with Junk food, you loose 2 points.");
+					Label l7=new Label("6. Whenever you get negative score, you will Lose");
+					
+					l2.setBounds(50, 50, 650, 30);
+					l3.setBounds(50, 120, 650, 30);
+					l4.setBounds(50, 190, 650, 30);
+					l5.setBounds(50, 260, 650, 30);
+					l6.setBounds(50, 330, 650, 30);
+					l7.setBounds(50, 400, 650, 30);
+					
+					l2.setFont(ft1);
+					l3.setFont(ft1);
+					l4.setFont(ft1);
+					l5.setFont(ft1);
+					l6.setFont(ft1);
+					l7.setFont(ft1);
+					
+					Button b4=new Button("BACK");
+					b4.setBounds(700, 450, 80, 50);
+					f2.add(b4);
+					f2.add(l2);
+					f2.add(l3);
+					f2.add(l4);
+					f2.add(l5);
+					f2.add(l6);
+					f2.add(l7);
+					f2.setBackground(Color.LIGHT_GRAY);
+					f2.setLayout(null);
+					f2.setVisible(true);
+					
+					  f2.addWindowListener(new WindowAdapter() {
+						    public void windowClosing(WindowEvent windowEvent){
+						    	f2.setVisible(false);
+								f.setVisible(true);
+						    }        
+				      });
+					  
+					  b4.addActionListener(new ActionListener(){							
+							public void actionPerformed(ActionEvent e) {
+								f2.setVisible(false);
+								f.setVisible(true);	
+							}
+					  });
+				}
+			});
+	  		
+
+	  	 
+	  		 b1.addActionListener(new ActionListener(){
+	  				public void actionPerformed(ActionEvent e) {
+	  				f.dispose();
+	  				frame.setResizable(false);
+	  			    frame.setVisible(true);
+	  				frame.setFocusable(true);
+	  				//setFocusable(true);
+	  				state=GameState.Running;
+	  			   }
+			 });
+	  		
+	  		 b3.addActionListener(new ActionListener(){
+
+	  				
+	  				public void actionPerformed(ActionEvent e) {
+	  				System.exit(0);
+	  					}
+	  				});
+	  		 
+	  		 f.addWindowListener(new WindowAdapter() {
+	  		    public void windowClosing(WindowEvent windowEvent){
+	  		      System.exit(0);
+	  		    }        
+	  		 });
+
+
 		try {
 			base = getDocumentBase();
 		} catch (Exception e) {
@@ -81,7 +175,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Image Setups
 		//characters for animation
-//		character = getImage(base, "data/bheem.png");
 		character = getImage(base, "data/character.png");
 		character2 = getImage(base, "data/character2.png");
 		character3 = getImage(base, "data/character3.png");
@@ -126,7 +219,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	@Override
 	public void start() {
 		// start of Applet 
-		
 		bg1 = new Background(0, 0);
 		bg2 = new Background(2160, 0);
 		robot = new Robot();
@@ -151,7 +243,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		
 		// creating thread
 		Thread thread = new Thread(this);
-		thread.start();
+			thread.start();
 	}
 
 	private void loadMap(String filename) throws IOException {
@@ -218,7 +310,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			
 			for (int i = 0; i < outPut.length; i++) {	
 				strBuilder.append(outPut[i]);
-				}
+			}
 			String toWriteBack = strBuilder.toString();
 				
 			System.out.println(toWriteBack);
@@ -227,7 +319,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			try {
 			    out = new BufferedWriter(new FileWriter("data/highscore.txt"));
 			    out.write(toWriteBack);  //Replace with the string   
-//			    out.close();
+			    //out.close();
 			}
 			
 			catch (IOException e)
@@ -264,8 +356,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     @Override
 public void run() {
+   while(true){
+	   System.out.println(state);
+    	if(state==GameState.Running){
 //this method is the game loop. the thread sleeps for particular time as calculated.
-	if (state == GameState.Running) {
+	
+	
 		while (true) {
 			robot.update();
 			if (robot.isJumped()) {
@@ -317,8 +413,9 @@ public void run() {
 			
 		}
 	}
-
-}
+    	}
+   }	
+    
 		
 	
 
@@ -340,17 +437,9 @@ public void run() {
 
 	@Override
 	public void paint(Graphics g) {
-		if(state == GameState.Start){
-			
-//			g.setColor(Color.BLACK);
-//			g.fillRect(0, 0, 800, 480);
-//			g.setColor(Color.WHITE);
-//			g.drawString("Start", 360, 240);
-//			g.drawString(Integer.toString(score), 360, 280);	
-			//state = GameState.Running;
-			
-		}
-		else if (state == GameState.Running) {
+		
+
+		if (state == GameState.Running) {
 
 		g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
 		g.drawImage(background, bg2.getBgX(), bg2.getBgY(), this);
@@ -405,6 +494,8 @@ public void run() {
 			
 			
 		}
+		
+		
 	}
 
 	private void updateTiles() {
