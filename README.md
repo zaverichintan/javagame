@@ -22,8 +22,8 @@ The player moves for a limited space only, the background moves in opposite dire
 Every time interval, the collision of the character is checked with platform, healthy food and junk food. The collision of bullet is compared to junk food.
 
 
-#Run
+*Run*
 Download the zip and import in eclipse and run. That's it ...
 
-#Screenshot
+*Screenshot*
 ![demo image tag](https://github.com/zaverichintan/javagame/blob/master/play.png)
